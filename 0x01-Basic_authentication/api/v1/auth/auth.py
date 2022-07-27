@@ -10,7 +10,7 @@ class Auth():
     """ Class to manage the API authentication """
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """   """
+        """ Validates excluded paths """
         if not path or not excluded_paths or len(excluded_paths) == 0:
             return True
         if path in excluded_paths:
@@ -35,5 +35,5 @@ class Auth():
         return request.headers['Authorization']
 
     def current_user(self, request=None) -> TypeVar('User'):
-        """  """
+        """ Validates current user authentication """
         return None
