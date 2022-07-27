@@ -8,37 +8,36 @@ import base64
 import re
 
 
-
 class BasicAuth(Auth):
     """ Class to manage the API basic authentication """
 
     def extract_base64_authorization_header(self, authorization_header: str
                                             ) -> str:
         """ Validate all requests to secure the API """
-        if authorization_header and type(authorization_header) is str and\
-            re.match("^Basic\s", authorization_header):
-            return authorization_header.split()[1]
+        if authorization_header and type(authorization_header) is str:
+            if re.match("^Basic\s", authorization_header):
+                return authorization_header.split()[1]
 
     def decode_base64_authorization_header(self,
                                            base64_authorization_header: str
-                                           )-> str:
+                                           ) -> str:
         """ returns the decoded value of a Base64 string """
-        if base64_authorization_header and\
-            type(base64_authorization_header) is str:
-            try:
-                decoded = base64.b64decode(base64_authorization_header)
-                return decoded.decode('utf-8')
-            except Exception:
-                return None
+        if base64_authorization_header:
+            if type(base64_authorization_header) is str:
+                try:
+                    decoded = base64.b64decode(base64_authorization_header)
+                    return decoded.decode('utf-8')
+                except Exception:
+                    return None
 
-    def extract_user_credentials(self, 
+    def extract_user_credentials(self,
                                  decoded_base64_authorization_header: str
                                  ) -> (str, str):
         """
         returns the user email and password from the Base64 decoded value
         """
-        if decoded_base64_authorization_header and\
-            type(decoded_base64_authorization_header) is str:
+        if decoded_base64_authorization_header:
+            if type(decoded_base64_authorization_header) is str:
                 details = decoded_base64_authorization_header.split(":", 1)
                 if len(details) > 1:
                     return (details[0], details[1])
@@ -47,9 +46,9 @@ class BasicAuth(Auth):
     def user_object_from_credentials(self, user_email: str, user_pwd: str
                                      ) -> TypeVar('User'):
         """ returns the User instance based on his email and password """
-        if not user_email and not user_pwd and\
-            type(user_email) is not str and type(user_pwd) is not str:
-            return None
+        if not user_email and not user_pwd:
+            if type(user_email) is not str and type(user_pwd) is not str:
+                return None
         from models.user import User
         users = User.search({"email": user_email})
         if users:
@@ -57,7 +56,7 @@ class BasicAuth(Auth):
                 if user.is_valid_password(user_pwd):
                     return user
         return None
-    
+
     def current_user(self, request=None) -> TypeVar('User'):
         """ retrieves the User instance for a request """
         auth = BasicAuth()
