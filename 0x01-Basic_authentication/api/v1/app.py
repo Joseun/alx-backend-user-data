@@ -24,7 +24,7 @@ elif getenv("AUTH_TYPE") == "basic_auth":
 def authenicate():
     """ Authenticate a request """
     if auth:
-        excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/', 
+        excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/',
                           '/api/v1/forbidden/']
         if auth.require_auth(request.path, excluded_paths):
             if not auth.authorization_header(request):
