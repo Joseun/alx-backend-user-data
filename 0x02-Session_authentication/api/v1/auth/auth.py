@@ -17,11 +17,11 @@ class Auth:
         if path in excluded_paths:
             return False
         if excluded_paths[-1] == '*':
-                pat = excluded_paths.split('*')
-                pat = pat[0] + '.*'
-                match = re.search(pat, path)
-                if match:
-                    return False
+            pat = excluded_paths.split('*')
+            pat = pat[0] + '.*'
+            match = re.search(pat, path)
+            if match:
+                return False
         if path[-1] != '/':
             path = path + '/'
         if path in excluded_paths:
